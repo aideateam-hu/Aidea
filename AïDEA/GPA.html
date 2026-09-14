@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>AïDEA - Smart GPA Tracker</title>
+    <link rel="icon" href="media\logo.ico" type="image/x-icon">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Poppins:wght@300;600;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', 'Cairo', sans-serif; }
+        body { background-color: #050505; color: #ffffff; min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden; }
+        
+        #particles-js { position: fixed; width: 100%; height: 100%; z-index: 1; top: 0; left: 0; }
+        nav, section, footer { position: relative; z-index: 2; }
+
+        input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+        input[type=number] { -moz-appearance: textfield; appearance: textfield; }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 50px;
+            background-color: rgba(0, 0, 0, 0.8);
+            border-bottom: 1px solid #1a1a1a;
+            backdrop-filter: blur(10px);
+            direction: ltr; 
+        }
+
+        .logo img { height: 50px; width: auto; display: block; }
+
+        .nav-links { 
+            display: flex; 
+            gap: 30px; 
+            flex-direction: row-reverse;
+        }
+
+        .nav-links a { 
+            color: #fff; text-decoration: none; font-weight: 700; transition: 0.3s; 
+            font-size: 1.1rem; margin: 0; font-family: 'Cairo', sans-serif; 
+        }
+        .nav-links a:hover, .nav-links a.active { color: #F2EE14; text-shadow: 0 0 10px #f2ee14; }
+
+
+        .calculator-section { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 50px 20px; width: 100%; max-width: 700px; margin: 0 auto; direction: ltr; }
+        .section-title { font-size: 2.8rem; margin-bottom: 30px; text-align: center; font-weight: 800; }
+        .section-title span { color: #F2EE14; }
+
+        .calc-card { background: rgba(10, 10, 10, 0.8); border: 1px solid #1a1a1a; border-radius: 20px; padding: 35px; width: 100%; box-shadow: 0 20px 50px rgba(0,0,0,0.7); backdrop-filter: blur(5px); }
+        
+        .row-container { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+        .subject-row { display: flex; gap: 10px; align-items: center; animation: fadeIn 0.3s; }
+        
+        .input-box { display: flex; flex-direction: column; text-align: left; }
+        label { font-size: 0.85rem; color: #888; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px; }
+
+        input, select { background-color: #000; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 10px; font-size: 1rem; outline: none; transition: 0.3s; text-align: center; width: 100%; }
+        input:focus, select:focus { border-color: #F2EE14; box-shadow: 0 0 15px rgba(242, 238, 20, 0.2); }
+
+        .controls { display: flex; justify-content: space-between; margin-top: 25px; gap: 15px; }
+        button { cursor: pointer; padding: 15px 25px; border-radius: 10px; font-weight: 700; border: none; transition: 0.4s; }
+        
+        .btn-add { background-color: transparent; border: 1px dashed #F2EE14; color: #F2EE14; flex: 1; }
+        .btn-add:hover { background-color: rgba(242, 238, 20, 0.05); transform: translateY(-2px); }
+        
+        .btn-calc { background-color: #F2EE14; color: #000; flex: 2; font-size: 1.1rem; box-shadow: 0 10px 20px rgba(242, 238, 20, 0.2); }
+        .btn-calc:hover { transform: scale(1.05); box-shadow: 0 15px 30px rgba(242, 238, 20, 0.4); }
+        
+        .btn-remove { background: #ff4d4d22; color: #ff4d4d; border: 1px solid #ff4d4d44; width: 40px; height: 40px; font-size: 1.5rem; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-top: 22px; cursor: pointer; }
+        .btn-remove:hover { background: #ff4d4d; color: #fff; }
+
+        .result-box { margin-top: 40px; text-align: center; display: none; padding: 30px; border-radius: 15px; background: rgba(242, 238, 20, 0.03); border: 1px solid #f2ee1422; animation: slideUp 0.6s ease-out; }
+        .result-value { font-size: 4.5rem; color: #F2EE14; font-weight: 900; text-shadow: 0 0 30px rgba(242, 238, 20, 0.4); line-height: 1; }
+        .rating-text { color: #fff; margin-top: 15px; font-size: 1.4rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+        .ai-note { color: #aaa; font-size: 1rem; font-style: italic; margin-top: 10px; font-weight: 300; }
+
+        footer { text-align: center; padding: 30px; color: #555; background: #000; border-top: 1px solid #1a1a1a; font-family: 'Cairo', sans-serif; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @media (max-width: 768px) { nav { padding: 20px; } .nav-links { gap: 15px; } }
+    </style>
+</head>
+<body>
+    <div id="particles-js"></div>
+
+    <nav>
+        <div class="logo"><img src="media\aidea_name_logo.png" alt="AïDEA Logo"></div>
+        <div class="nav-links">
+            <a href="index.html">الرئيسية</a>
+            <a href="materials.html">المواد</a> 
+            <a href="GPA.html" class="active">المعدل</a>
+            <a href="StudyWithWiueni.html">Wiueni ادرس مع</a>
+        </div>
+    </nav>
+
+    <section class="calculator-section">
+        <h1 class="section-title">Smart <span>GPA</span> Analysis</h1>
+        <div class="calc-card">
+            
+            <div style="border-bottom: 1px dashed #333; padding-bottom: 25px; margin-bottom: 25px;">
+                <label style="display: block; margin-bottom: 10px; color: #F2EE14;">Previous Cumulative Data </label>
+                <div style="display: flex; gap: 15px;">
+                    <div class="input-box" style="flex: 1;">
+                        <label>Current GPA / 4.00</label>
+                        <input type="number" id="prevGPA" placeholder="e.g. 3.20" step="0.01" min="0" max="4">
+                    </div>
+                    <div class="input-box" style="flex: 1;">
+                        <label>Total Hours Completed</label>
+                        <input type="number" id="prevHours" placeholder="Total Cr. Hrs" step="1" min="0">
+                    </div>
+                </div>
+            </div>
+
+            <div id="subjects-container" class="row-container">
+                </div>
+
+            <div class="controls">
+                <button class="btn-add" onclick="addSubject()">+ Add Course</button>
+                <button class="btn-calc" onclick="calculateGPA()">Analyze My GPA</button>
+            </div>
+
+            <div class="result-box" id="resultBox">
+                <p style="color: #888; text-transform: uppercase; letter-spacing: 2px; font-size: 0.9rem;">Semester GPA</p>
+                <div class="result-value" id="semesterResult">0.00</div>
+                <div class="rating-text" id="semesterRating">-</div>
+                <div class="ai-note" id="aiNote">"Processing your academic data..."</div>
+                
+                <div id="cumulativeSection" style="margin-top: 30px; display: none; border-top: 1px solid #333; padding-top: 20px;">
+                    <p style="color: #F2EE14; font-size: 0.9rem; letter-spacing: 1px; margin-bottom: 5px;">NEW CUMULATIVE GPA</p>
+                    <div style="font-size: 3rem; color: #fff; font-weight: 800;" id="cumulativeResult">0.00</div>
+                    <p style="color: #666; font-size: 0.8rem; margin-top: 5px;" id="totalHoursText">Total Hours: 0</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 جميع الحقوق محفوظة لفريق <span style="color:#F2EE14; font-weight:bold;">AïDEA</span>. ❤️</p>
+    </footer>
+
+    <script>
+        const container = document.getElementById('subjects-container');
+
+        function addSubject() {
+            const div = document.createElement('div'); 
+            div.className = 'subject-row';
+            
+            const gradesOrder = [
+                {p: 4.00, t: "A+"}, {p: 3.75, t: "A"}, {p: 3.50, t: "A-"}, 
+                {p: 3.25, t: "B+"}, {p: 3.00, t: "B"}, {p: 2.75, t: "B-"}, 
+                {p: 2.50, t: "C+"}, {p: 2.25, t: "C"}, {p: 2.00, t: "C-"}, 
+                {p: 1.75, t: "D+"}, {p: 1.50, t: "D"}, {p: 0.00, t: "F (Fail)"}
+            ];
+            
+            let optionsHTML = gradesOrder.map(g => `<option value="${g.p}">${g.t}</option>`).join('');
+            
+            div.innerHTML = `
+                <div class="input-box" style="flex: 1;">
+                    <label>Hours</label>
+                    <input type="number" class="hours" value="3" min="1" max="6">
+                </div>
+                <div class="input-box" style="flex: 2;">
+                    <label>Grade</label>
+                    <select class="grade">${optionsHTML}</select>
+                </div>
+                <button class="btn-remove" onclick="this.parentElement.remove()">×</button>
+            `;
+            container.appendChild(div);
+        }
+
+        function calculateGPA() {
+            const rows = document.querySelectorAll('.subject-row'); 
+            let semesterPoints = 0; 
+            let semesterHours = 0;
+            
+            rows.forEach(row => { 
+                const h = parseFloat(row.querySelector('.hours').value); 
+                const g = parseFloat(row.querySelector('.grade').value); 
+                
+                if (h > 0 && !isNaN(g)) { 
+                    semesterPoints += (h * g); 
+                    semesterHours += h; 
+                } 
+            });
+
+            if (semesterHours === 0) { 
+                document.getElementById('resultBox').style.display = 'none';
+                alert("Please add at least one course with valid hours!"); 
+                return; 
+            }
+            
+            const semesterGPA = semesterPoints / semesterHours;
+            
+            const resultBox = document.getElementById('resultBox');
+            resultBox.style.display = 'block';
+            
+            document.getElementById('semesterResult').innerText = semesterGPA.toFixed(2);
+            
+            setRating(semesterGPA);
+
+            const prevGPA = parseFloat(document.getElementById('prevGPA').value);
+            const prevHours = parseFloat(document.getElementById('prevHours').value);
+            const cumSection = document.getElementById('cumulativeSection');
+
+            if (!isNaN(prevGPA) && !isNaN(prevHours) && prevHours > 0) {
+
+                const totalOldPoints = prevGPA * prevHours;
+                const totalNewPoints = totalOldPoints + semesterPoints;
+                const totalHours = prevHours + semesterHours;
+                
+                const newCumulativeGPA = totalNewPoints / totalHours;
+                
+                cumSection.style.display = 'block';
+                document.getElementById('cumulativeResult').innerText = newCumulativeGPA.toFixed(2);
+                document.getElementById('totalHoursText').innerText = `Total Hours: ${totalHours}`;
+            } else {
+                cumSection.style.display = 'none';
+            }
+        }
+
+        function setRating(gpa) {
+            const rating = document.getElementById('semesterRating');
+            const note = document.getElementById('aiNote');
+            
+            rating.style.color = "#fff"; // Default color
+
+            if (gpa >= 3.60) {
+                rating.innerText = "OUTSTANDING! 🌟";
+                rating.style.color = "#F2EE14";
+                note.innerText = "\"Incredible work! Your dedication is truly paying off.\"";
+                confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#F2EE14', '#ffffff'] });
+            } else if (gpa >= 3.00) {
+                rating.innerText = "VERY GOOD! 🚀";
+                note.innerText = "\"Great job! You are maintaining a strong academic record.\"";
+            } else if (gpa >= 2.50) {
+                rating.innerText = "GOOD EFFORT! 💪";
+                note.innerText = "\"You're doing well, but there is room for improvement!\"";
+            } else if (gpa >= 2.00) {
+                rating.innerText = "SATISFACTORY 👍";
+                note.innerText = "\"You passed, but try to push harder next semester!\"";
+            } else {
+                rating.innerText = "DON'T GIVE UP! 🔥";
+                rating.style.color = "#ff4d4d";
+                note.innerText = "\"Failure is just a stepping stone. Learn from this and come back stronger!\"";
+            }
+        }
+
+        particlesJS('particles-js', { "particles": { "number": { "value": 60 }, "color": { "value": "#F2EE14" }, "opacity": { "value": 0.2 }, "size": { "value": 3 }, "line_linked": { "enable": true, "color": "#F2EE14", "opacity": 0.1 }, "move": { "enable": true, "speed": 1 } } });
+        
+        window.onload = () => { for(let i=0; i<4; i++) addSubject(); };
+    </script>
+</body>
+</html>
