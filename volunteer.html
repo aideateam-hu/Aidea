@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AïDEA - Volunteering 🤝</title>
+    <link rel="icon" href="media\logo.ico" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Poppins:wght@300;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', 'Cairo', sans-serif; }
+        body { background-color: #050505; color: #ffffff; min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden; }
+
+        #particles-js { position: fixed; width: 100%; height: 100%; z-index: 1; top: 0; left: 0; }
+        nav, section, footer, .ai-assistant-social { position: relative; z-index: 2; }
+
+        /* --- Nav Bar --- */
+        nav {
+            display: flex; justify-content: space-between; align-items: center; padding: 20px 50px;
+            flex-direction: row-reverse; background-color: rgba(0, 0, 0, 0.85);
+            border-bottom: 1px solid #1a1a1a; backdrop-filter: blur(10px);
+            position: sticky; top: 0; z-index: 100;
+        }
+        .logo img { height: 50px; width: auto; display: block; }
+        .nav-links { display: flex; gap: 30px; }
+        .nav-links a { color: #fff; text-decoration: none; font-weight: 700; transition: 0.3s; font-size: 1.1rem; margin: 0; position: relative; }
+        .nav-links a:hover, .nav-links a.active { color: #F2EE14; text-shadow: 0 0 10px #f2ee14; }
+
+        /* --- Volunteer Hero --- */
+        .hero-volunteer { text-align: center; padding: 80px 20px 40px; position: relative; z-index: 10; }
+        .hero-volunteer h1 { font-size: 3.5rem; line-height: 1.2; margin-bottom: 20px; font-weight: 900; font-family: 'Poppins', sans-serif; }
+        .hero-volunteer .highlight { color: #F2EE14; text-shadow: 0 0 30px rgba(242, 238, 20, 0.4); }
+        .hero-volunteer p { color: #ccc; font-size: 1.2rem; max-width: 650px; margin: 0 auto 40px; font-family: 'Poppins', sans-serif; line-height: 1.8; }
+
+        /* --- Cards Container --- */
+        .cards-wrapper {
+            display: flex; gap: 30px; justify-content: center; flex-wrap: wrap;
+            max-width: 1000px; width: 90%; margin: 0 auto 80px; position: relative; z-index: 10;
+        }
+
+        .action-container {
+            flex: 1; min-width: 320px;
+            background: rgba(255, 255, 255, 0.03); 
+            border: 1px solid rgba(255, 255, 255, 0.1); 
+            border-radius: 20px; padding: 40px 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); 
+            backdrop-filter: blur(15px); text-align: center; transition: 0.3s ease;
+            display: flex; flex-direction: column; justify-content: space-between;
+        }
+        .action-container:hover { border-color: #F2EE14; transform: translateY(-5px); }
+        .action-container h3 { font-size: 1.6rem; margin-bottom: 15px; color: #fff; }
+        .action-container p { color: #aaa; margin-bottom: 30px; font-size: 1rem; line-height: 1.6; flex-grow: 1; }
+
+        /* الأزرار */
+        .cta-btn { 
+            display: inline-block; background-color: #F2EE14; color: #000; 
+            padding: 12px 30px; border-radius: 12px; text-decoration: none; 
+            font-weight: 900; font-size: 1.1rem; transition: 0.3s; 
+            box-shadow: 0 10px 20px rgba(242, 238, 20, 0.2); font-family: 'Cairo', sans-serif; 
+        }
+        .cta-btn:hover { transform: scale(1.05); background-color: #fff; }
+        
+        /* زر مختلف للصندوق الثاني لتمييزه */
+        .cta-btn-outline {
+            display: inline-block; background-color: transparent; color: #F2EE14; 
+            padding: 12px 30px; border-radius: 12px; text-decoration: none; 
+            font-weight: 900; font-size: 1.1rem; transition: 0.3s; 
+            border: 2px solid #F2EE14; font-family: 'Cairo', sans-serif; 
+        }
+        .cta-btn-outline:hover { background-color: #F2EE14; color: #000; transform: scale(1.05); }
+
+        /* --- Social Menu --- */
+        .ai-assistant-social { position: fixed; bottom: 30px; left: 30px; width: 60px; height: 60px; z-index: 1000; display: flex; justify-content: center; align-items: center; }
+        .brain-trigger { font-size: 35px; cursor: pointer; width: 65px; height: 65px; background: #000; border: 2px solid #F2EE14; border-radius: 50%; display: flex; justify-content: center; align-items: center; box-shadow: 0 0 15px rgba(242, 238, 20, 0.5); position: relative; z-index: 5; transition: transform 0.3s; -webkit-tap-highlight-color: transparent; }
+        .social-orb { position: absolute; width: 45px; height: 45px; background: #222; border: 1px solid #555; border-radius: 50%; display: flex; justify-content: center; align-items: center; color: #fff; opacity: 0; transform: scale(0); transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); z-index: 1; }
+        .social-orb svg { width: 20px; height: 20px; }
+        
+        .social-orb.whatsapp:hover, .social-orb.whatsapp.active { background: #25D366; border-color: #25D366; box-shadow: 0 0 10px #25D366; }
+        .social-orb.linkedin:hover, .social-orb.linkedin.active { background: #0077b5; border-color: #0077b5; box-shadow: 0 0 10px #0077b5; }
+        .social-orb.facebook:hover, .social-orb.facebook.active { background: #1877F2; border-color: #1877F2; box-shadow: 0 0 10px #1877F2; }
+        .social-orb.instagram:hover, .social-orb.instagram.active { background: #E1306C; border-color: #E1306C; box-shadow: 0 0 10px #E1306C; }
+        .social-orb.telegram:hover, .social-orb.telegram.active { background: #0088cc; border-color: #0088cc; box-shadow: 0 0 10px #0088cc; }
+
+        .ai-assistant-social:hover .brain-trigger, .ai-assistant-social.active .brain-trigger { transform: scale(1.1); box-shadow: 0 0 25px rgba(242, 238, 20, 0.8); }
+        .ai-assistant-social:hover .social-orb.whatsapp, .ai-assistant-social.active .social-orb.whatsapp { transform: translate(15px,-90px) scale(1); opacity: 1; }
+        .ai-assistant-social:hover .social-orb.facebook, .ai-assistant-social.active .social-orb.facebook { transform: translate(60px, -70px) scale(1); opacity: 1; }
+        .ai-assistant-social:hover .social-orb.instagram, .ai-assistant-social.active .social-orb.instagram { transform: translate(90px, -30px) scale(1); opacity: 1; }
+        .ai-assistant-social:hover .social-orb.linkedin, .ai-assistant-social.active .social-orb.linkedin { transform: translate(100px, 20px) scale(1); opacity: 1; }
+        .ai-assistant-social:hover .social-orb.telegram, .ai-assistant-social.active .social-orb.telegram { transform: translate(-35px, -90px) scale(1); opacity: 1; }
+
+        footer { text-align: center; padding: 30px; color: #555; background: #000; border-top: 1px solid #1a1a1a; margin-top: auto; }
+
+        /* --- Media Queries --- */
+        @media (max-width: 768px) { 
+            nav { padding: 10px 15px !important; flex-direction: row-reverse !important; justify-content: space-between !important; background-color: #000 !important; gap: 5px !important; }
+            .logo img { height: 22px !important; }
+            .nav-links { display: flex !important; width: auto !important; gap: 8px !important; flex-direction: row !important; flex-wrap: nowrap !important; }
+            .nav-links a { font-size: 0.75rem !important; padding: 2px 5px !important; white-space: nowrap !important; }
+            .hero-volunteer h1 { font-size: 2.2rem; }
+            .cards-wrapper { flex-direction: column; }
+            .ai-assistant-social { left: 20px; bottom: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="particles-js"></div>
+
+    <nav>
+        <div class="logo"><img src="media\aidea_name_logo.png" alt="AïDEA Logo"></div>
+        <div class="nav-links">
+            <a href="index.html">الرئيسية</a>
+            <a href="materials.html">المواد</a> 
+            <a href="GPA.html">المعدل</a>
+            <a href="StudyWithWiueni.html">ادرس مع Wiueni</a>
+            <a href="volunteer.html" class="active">التطوع 🤝</a>
+            <a href="https://chromewebstore.google.com/detail/mkamiagkgmmjpljjfcjcbniogadgjhml?utm_source=item-share-cb" target="_blank" rel="noopener noreferrer" style="font-size: 0.9rem; padding: 5px 10px; color: #F2EE14;">
+                🧩 إضافة الجدول
+            </a>
+        </div>
+    </nav>
+
+    <section class="hero-volunteer">
+        <h1>كن جزءاً من <span class="highlight">التغيير</span> ✨</h1>
+        <p>
+            سواء كنت تريد مساعدة زملائك برفع المحاضرات، أو الانضمام لفريقنا لتطوير مهاراتك وصنع تأثير حقيقي، مكانك معنا!
+        </p>
+    </section>
+
+    <!-- حاوية الصناديق -->
+    <section class="cards-wrapper">
+        
+        <!-- الصندوق الأول: تسجيل المحاضرات -->
+        <div class="action-container">
+            <h3>تسجيل المحاضرات 🎙️</h3>
+            <p>هل قمت بتسجيل محاضرة؟ اضغط على الزر أدناه للانتقال إلى نموذج الرفع الآمن، وارفع ملف المحاضرة مباشرة من جهازك لتفيد زملائك.</p>
+            <!-- 👇 ضعي رابط فورم المحاضرات هنا 👇 -->
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLSdgEO0gki4u4Uo9AhOIiVBZFZW_q4NexnkfSmjryuwKzvJ-gw/viewform?usp=dialog" target="_blank" class="cta-btn">ابدأ الرفع 🚀</a>
+        </div>
+
+        <!-- الصندوق الثاني: الانضمام للفريق -->
+        <div class="action-container">
+            <h3>الانضمام للفريق 🤝</h3>
+            <p>هل تملك مهارات في التصميم، البرمجة، الإدارة أو التنظيم؟ انضم لفريق AïDEA وساهم في بناء مجتمع طلابي مميز.</p>
+            <!-- 👇 ضعي رابط فورم الانضمام هنا 👇 -->
+            <a href="https://aidea-team-system.onrender.com/join.html" target="_blank" class="cta-btn-outline">قدم الآن ✨</a>
+        </div>
+
+    </section>
+
+    <!-- قائمة التواصل الاجتماعي -->
+    <div class="ai-assistant-social" id="socialMenu">
+        <a href="https://chat.whatsapp.com/FunUuZvGnLZ180GkPafGsj" target="_blank" rel="noopener noreferrer" class="social-orb whatsapp" aria-label="WhatsApp Community">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+        </a>
+        <a href="https://www.linkedin.com/company/a%C3%AFdea/" target="_blank" rel="noopener noreferrer" class="social-orb linkedin" aria-label="LinkedIn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+        </a>
+        <a href="https://www.facebook.com/share/g/16HHSvonhe/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" class="social-orb facebook" aria-label="Facebook">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+        </a>
+        <a href="https://www.instagram.com/aidea._?igsh=anFzbWxkZ2dzN29l" target="_blank" rel="noopener noreferrer" class="social-orb instagram" aria-label="Instagram">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+        </a>
+        <a href="https://t.me/addlist/kNfZhYKQiWA2NDA0" target="_blank" rel="noopener noreferrer" class="social-orb telegram" aria-label="Telegram" style="display: flex;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="24" height="24">
+                <path d="M22 2L11 13"></path>
+                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+            </svg>
+        </a>
+        <div class="brain-trigger" onclick="toggleSocialMenu()">
+            👀
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 جميع الحقوق محفوظة لفريق <span style="color:#F2EE14; font-weight:bold;">AïDEA</span>. ❤️</p>
+    </footer>
+
+    <script>
+        particlesJS('particles-js', { 
+            "particles": { 
+                "number": { "value": 80 }, 
+                "color": { "value": "#F2EE14" }, 
+                "opacity": { "value": 0.3 }, 
+                "size": { "value": 3 }, 
+                "line_linked": { "enable": true, "color": "#F2EE14", "opacity": 0.15 }, 
+                "move": { "enable": true, "speed": 1.5 } 
+            } 
+        });
+
+        window.onclick = function(event) {
+            var socialMenu = document.getElementById('socialMenu');
+            if (socialMenu && !socialMenu.contains(event.target)) {
+                socialMenu.classList.remove('active');
+            }
+        }
+
+        function toggleSocialMenu() {
+            var menu = document.getElementById('socialMenu');
+            menu.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>
